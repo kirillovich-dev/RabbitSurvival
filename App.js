@@ -1,6 +1,5 @@
 
-import {Game} from "./src/Game.js"
-import {Unit} from "./src/Unit.js"
+import {CollisionSystem} from "./src/CollisionSystem.js"
 
 (async () => {
     // Create a new application
@@ -11,8 +10,6 @@ import {Unit} from "./src/Unit.js"
     await app.init({ background: '#0c9917ff', resizeTo: window });
 
     document.body.appendChild(app.canvas);
-    const unit = new Unit()
-    const game = new Game(app)
-
+    const collisionSystem = new CollisionSystem(app);
 
 })()
