@@ -15,12 +15,16 @@ export class CollisionSystem {
         const enemy = new Enemy(this.app);
     }
     createBullet() {
-        const bullet = new Bullet(this.app, this.char.getCharX(), this.char.getCharY(), this.char.direction);
+        const bullet = new Bullet(this.app, this.char.getCharX(), this.char.getCharY(), this.mouseX, this.mouseY);
     }
     listeners() {
         document.addEventListener('keyup', (e) => {
             this.shoot(e);
         });
+        document.addEventListener("mousemove", (e) => {
+            this.mouseX = e.x;
+            this.mouseY = e.y;
+        })
     }
     shoot(e) {
         if (e.key === "l") {

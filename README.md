@@ -18,4 +18,4 @@ start local server, open game.html file, that's it - enjoy!
 
 ##Authors
 
-kirillav08@gmail.com
+Kirill A
