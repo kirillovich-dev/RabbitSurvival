@@ -1,5 +1,3 @@
-//import { Graphics } from 'pixi.js';
-
 export class Bullet {
     constructor(app,x,y, mouseX, mouseY){
         this.app = app;
@@ -20,42 +18,29 @@ export class Bullet {
         this.app.stage.addChild(graphics);
         this.bullet = graphics;
     }
-    // onMoveObject() {
-    //     console.log(this.direction)
-    //     if (this.direction == "ArrowRight" || this.direction == "d") {
-    //     this.bullet.x += this.bulletSpeed
-    //    }
-    //    if (this.direction == "ArrowLeft" || this.direction == "a") {
-    //     this.bullet.x -= this.bulletSpeed
-    //    }
-    //    if (this.direction == "ArrowDown" || this.direction == "s") {
-    //     this.bullet.y += this.bulletSpeed
-    //    }
-    //    if (this.direction == "ArrowUp" || this.direction == "w") {
-    //     this.bullet.y -= this.bulletSpeed
-    //    }
-    // }
+    
     onMoveObject(delta) {
         this.bullet.x += this.vectorX/this.bulletSpeed * delta;
         this.bullet.y += this.vectorY/this.bulletSpeed * delta;
-        console.log(this.bullet.x, this.bullet.y)
     }
  
     wallStop() {
-        if (!this.bullet) {
-            return;
-        }
+        if (!this.bullet) return;
         if (this.bullet.y < -window.innerHeight) {
             this.removeBullet();
+            return;
         }
         if (this.bullet.y > window.innerHeight) {
             this.removeBullet();
+            return;
         }
         if (this.bullet.x > window.innerWidth) {
             this.removeBullet();
+            return;
         }
         if (this.bullet.x < -window.innerWidth) {
             this.removeBullet();
+            return;
         }
     }
 
@@ -63,6 +48,7 @@ export class Bullet {
         this.app.stage.removeChild(this.bullet);
         this.app.ticker.remove(this.tickerFn);
         this.bullet.destroy();
+        this.bullet = null;
     }
 
     update(dt) {
