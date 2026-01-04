@@ -7,12 +7,13 @@ export class CollisionSystem {
         this.app = app;
         this.listeners();
         this.createCharacter();
+        this.createEnemy();
     }
     createCharacter() {
         this.char = new Character(this.app);
     }
     createEnemy() {
-        const enemy = new Enemy(this.app);
+        const enemy = new Enemy(this.app, 'assets/char.png');
     }
     createBullet() {
         const bullet = new Bullet(this.app, this.char.getCharX(), this.char.getCharY(), this.mouseX, this.mouseY);
@@ -27,7 +28,7 @@ export class CollisionSystem {
         })
     }
     shoot(e) {
-        if (e.key === "l") {
+        if (e.key === " ") {
             this.createBullet();
         }
     }

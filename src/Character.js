@@ -1,3 +1,4 @@
+import {store} from "./gameStore.js"
 export class Character {
     constructor(app) {
         this.app = app;
@@ -15,8 +16,8 @@ export class Character {
     }
     startPosition() {
         this.char.anchor.set(0.5);
-        this.char.x = window.innerWidth / 2;
-        this.char.y = window.innerHeight / 2;
+        this.char.x = store.character.x;
+        this.char.y = store.character.y;
         this.app.stage.addChild(this.char);
     }
 
@@ -44,6 +45,9 @@ export class Character {
 
         this.char.x += dx * this.speed * dt;
         this.char.y += dy * this.speed * dt;
+
+        store.character.x = this.char.x;
+        store.character.y = this.char.y;
 
         this.wallStop();
     }

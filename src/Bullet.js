@@ -14,7 +14,7 @@ export class Bullet {
     bulletSpeed = 15;
 
     createBullet() {
-        const graphics = new PIXI.Graphics().circle(this.bulletX,this.bulletY, 10).fill(0xff0000);
+        const graphics = new PIXI.Graphics().circle(this.bulletX,this.bulletY, 10).fill(0xffffff);
         this.app.stage.addChild(graphics);
         this.bullet = graphics;
     }
@@ -54,11 +54,6 @@ export class Bullet {
     update(dt) {
         this.onMoveObject(dt);
         this.wallStop();
-    }
-
-
-    ticker() {
-        this.app.ticker.add(delta => this.update(delta.deltaMS / 60));
     }
 
 
