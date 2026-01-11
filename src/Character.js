@@ -5,19 +5,20 @@ export class Character {
         this.keys = {};
         this.speed = 20;
         this.initCharacter();
+        this.tickerFn = (delta) => this.update(delta.deltaMS / 60);
+        this.app.ticker.add(this.tickerFn);
     }
-
+    
     async initCharacter() {
         const texture = await PIXI.Assets.load('assets/char.png');
         this.char = PIXI.Sprite.from(texture);
         this.listeners();
         this.startPosition();
-        this.ticker();
     }
     startPosition() {
         this.char.anchor.set(0.5);
-        this.char.x = store.character.x;
-        this.char.y = store.character.y;
+        this.char.x = store.char.x;
+        this.char.y = store.char.y;
         this.app.stage.addChild(this.char);
     }
 
@@ -26,11 +27,10 @@ export class Character {
         window.addEventListener("keyup", e => this.keys[e.code] = false);
     }
 
-    ticker() {
-        this.app.ticker.add(delta => this.update(delta.deltaMS / 60));
-    }
-
     update(dt) {
+        if (!this.char) {
+            return
+        }
         let dx = 0, dy = 0;
         if (this.keys.KeyA || this.keys.ArrowLeft) dx--;
         if (this.keys.KeyD || this.keys.ArrowRight) dx++;
@@ -46,8 +46,8 @@ export class Character {
         this.char.x += dx * this.speed * dt;
         this.char.y += dy * this.speed * dt;
 
-        store.character.x = this.char.x;
-        store.character.y = this.char.y;
+        store.char.x = Math.round(this.char.x * 10)/10;
+        store.char.y = Math.round(this.char.y * 10)/10;
 
         this.wallStop();
     }
@@ -73,5 +73,14 @@ export class Character {
 
     getCharY() {
         return this.char.y;
+    }
+
+    removeCharacter() {
+        this.app.stage.removeChild(this.char);
+        this.app.ticker.remove(this.tickerFn);
+        this.char.destroy();
+        this.char = null;
+        store.char.x = null;
+        store.char.y = null;
     }
 }

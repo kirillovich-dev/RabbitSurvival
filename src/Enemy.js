@@ -1,7 +1,6 @@
 import {store} from "./gameStore.js"
 export class Enemy {
   constructor(app, spriteAddress) {
-    console.log("enemy loaded")
     this.app = app;
     this.spriteAddress = spriteAddress;
     this.initEnemy();
@@ -9,7 +8,7 @@ export class Enemy {
     this.app.ticker.add(this.tickerFn);
   }
 
-  enemySpeed = 30;
+  enemySpeed = 10;
   
   async initEnemy() {
     const texture = await PIXI.Assets.load(this.spriteAddress);
@@ -19,8 +18,8 @@ export class Enemy {
 
   startPosition() {
     this.enemy.anchor.set(0.5);
-    this.enemy.x = 300;
-    this.enemy.y = 300;
+    this.enemy.x = store.enemy.x;
+    this.enemy.y = store.enemy.y;
     this.app.stage.addChild(this.enemy);
   }
 
@@ -31,14 +30,31 @@ export class Enemy {
   }
 
   onMoveObject(delta) {
-      this.enemy.x += this.vectorX/this.enemySpeed * delta;
-      this.enemy.y += this.vectorY/this.enemySpeed * delta;
+      this.enemy.x += this.dirX * this.enemySpeed * delta;
+      this.enemy.y += this.dirY * this.enemySpeed * delta;
+      store.enemy.x = Math.round(this.enemy.x * 10)/10;
+      store.enemy.y = Math.round(this.enemy.y * 10)/10;
   }
 
-    findVector() {
-        this.vectorX = store.character.x - this.enemy.x;
-        this.vectorY = store.character.y - this.enemy.y;
-  }
+  findVector() {
+        const dx = store.char.x - this.enemy.x;
+        const dy = store.char.y - this.enemy.y;
+
+        const length = Math.sqrt(dx * dx + dy * dy);
+
+        this.dirX = dx / length;
+        this.dirY = dy / length;
+    }
+
+  removeEnemy() {
+    if (!this.enemy){
+      return
+    }
+        this.app.stage.removeChild(this.enemy);
+        this.app.ticker.remove(this.tickerFn);
+        this.enemy.destroy();
+        this.enemy = null;
+    }
 
 
 }

@@ -19,11 +19,22 @@ export class Bullet {
         this.bullet = graphics;
     }
     
-    onMoveObject(delta) {
-        this.bullet.x += this.vectorX/this.bulletSpeed * delta;
-        this.bullet.y += this.vectorY/this.bulletSpeed * delta;
+    findVector() {
+        const dx = this.mouseX - this.bulletX;
+        const dy = this.mouseY - this.bulletY;
+
+        const length = Math.sqrt(dx * dx + dy * dy);
+
+        this.dirX = dx / length;
+        this.dirY = dy / length;
     }
- 
+
+    onMoveObject(delta) {
+        this.bullet.x += this.dirX * this.bulletSpeed * delta;
+        this.bullet.y += this.dirY * this.bulletSpeed * delta;
+    }
+
+
     wallStop() {
         if (!this.bullet) return;
         if (this.bullet.y < -window.innerHeight) {
@@ -45,6 +56,9 @@ export class Bullet {
     }
 
     removeBullet() {
+        if (!this.bullet) {
+            return
+        }
         this.app.stage.removeChild(this.bullet);
         this.app.ticker.remove(this.tickerFn);
         this.bullet.destroy();
@@ -54,11 +68,5 @@ export class Bullet {
     update(dt) {
         this.onMoveObject(dt);
         this.wallStop();
-    }
-
-
-    findVector() {
-        this.vectorX = this.mouseX - this.bulletX;
-        this.vectorY = this.mouseY - this.bulletY;
     }
 }
