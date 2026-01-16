@@ -16,7 +16,7 @@ export class CollisionSystem {
         this.char = new Character(this.app);
     }
     createEnemy() {
-        this.enemy = new Enemy(this.app, 'assets/char.png');
+        this.enemy = new Enemy(this.app, 'assets/enemy.png');
     }
     createBullet() {
         this.bullet = new Bullet(this.app, this.char.getCharX(), this.char.getCharY(), this.mouseX, this.mouseY);
@@ -45,9 +45,17 @@ export class CollisionSystem {
 
     checkEnemyKilled() {
         if (this.bullet && this.enemy) {
-            if (this.bullet.x && store.enemy.x && this.bullet.x === store.enemy.x && this.bullet.y === store.enemy.y) {
+            const xCollision = (store.bullet.x >= store.enemy.x-store.enemy.width/2 && store.bullet.x <= store.enemy.x+store.enemy.width/2);
+            const yCollision = (store.bullet.y >= store.enemy.y-store.enemy.height/2 && store.bullet.y <= store.enemy.y+store.enemy.height/2);
+            if (xCollision && yCollision) {
+                store.bullet.x = undefined;
+                store.bullet.y = undefined;
+                store.enemy.x = undefined;
+                store.enemy.y = undefined;
+                
                 this.bullet.removeBullet();
                 this.enemy.removeEnemy();
+                this.createEnemy();
             }
         }
     }

@@ -5,6 +5,12 @@ export const store = {
     },
     enemy: {
         x: 300,
-        y: 300
+        y: 300,
+        width: 30,
+        height: 30
+    },
+    bullet: {
+        x: 0,
+        y: 0
     }
 }

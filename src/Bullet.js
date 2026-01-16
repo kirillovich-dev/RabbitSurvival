@@ -1,8 +1,10 @@
+import {store} from "./gameStore.js";
+
 export class Bullet {
     constructor(app,x,y, mouseX, mouseY){
         this.app = app;
-        this.bulletX = x;
-        this.bulletY = y;
+        this.charX = x;
+        this.charY = y;
         this.mouseX = mouseX;
         this.mouseY = mouseY;
         this.createBullet();
@@ -14,14 +16,14 @@ export class Bullet {
     bulletSpeed = 15;
 
     createBullet() {
-        const graphics = new PIXI.Graphics().circle(this.bulletX,this.bulletY, 10).fill(0xffffff);
+        const graphics = new PIXI.Graphics().circle(this.charX,this.charY, 10).fill(0xffffff);
         this.app.stage.addChild(graphics);
         this.bullet = graphics;
     }
     
     findVector() {
-        const dx = this.mouseX - this.bulletX;
-        const dy = this.mouseY - this.bulletY;
+        const dx = this.mouseX - this.charX;
+        const dy = this.mouseY - this.charY;
 
         const length = Math.sqrt(dx * dx + dy * dy);
 
@@ -32,6 +34,8 @@ export class Bullet {
     onMoveObject(delta) {
         this.bullet.x += this.dirX * this.bulletSpeed * delta;
         this.bullet.y += this.dirY * this.bulletSpeed * delta;
+        store.bullet.x = Math.round(this.bullet.x * 10)/10 + this.charX;
+        store.bullet.y = Math.round(this.bullet.y * 10)/10 + this.charY;
     }
 
 

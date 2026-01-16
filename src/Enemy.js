@@ -18,8 +18,8 @@ export class Enemy {
 
   startPosition() {
     this.enemy.anchor.set(0.5);
-    this.enemy.x = store.enemy.x;
-    this.enemy.y = store.enemy.y;
+    this.enemy.x = Math.random() * window.innerWidth;
+    this.enemy.y = Math.random() * window.innerHeight;
     this.app.stage.addChild(this.enemy);
   }
 
