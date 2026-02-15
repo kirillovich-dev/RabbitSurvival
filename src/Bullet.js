@@ -11,6 +11,8 @@ export class Bullet {
         this.findVector();
         this.tickerFn = (delta) => this.update(delta.deltaMS / 60);
         this.app.ticker.add(this.tickerFn);
+        this.bullet.isAlive = true;
+        // store.bullets.push(this.bullet);
     }
 
     bulletSpeed = 15;
@@ -32,10 +34,10 @@ export class Bullet {
     }
 
     onMoveObject(delta) {
-        this.bullet.x += this.dirX * this.bulletSpeed * delta;
-        this.bullet.y += this.dirY * this.bulletSpeed * delta;
-        store.bullet.x = Math.round(this.bullet.x * 10)/10 + this.charX;
-        store.bullet.y = Math.round(this.bullet.y * 10)/10 + this.charY;
+            this.bullet.x += this.dirX * this.bulletSpeed * delta;
+            this.bullet.y += this.dirY * this.bulletSpeed * delta;
+            this.bullet.x = Math.round(this.bullet.x * 10)/10 + this.charX;
+            this.bullet.y = Math.round(this.bullet.y * 10)/10 + this.charY;
     }
 
 
@@ -72,5 +74,10 @@ export class Bullet {
     update(dt) {
         this.onMoveObject(dt);
         this.wallStop();
+    }
+    checkIsAlive() {
+        if (this.bullet.isAlive === false) {
+            this.removeBullet();
+        }
     }
 }

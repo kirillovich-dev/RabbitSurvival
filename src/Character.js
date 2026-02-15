@@ -50,6 +50,7 @@ export class Character {
         store.char.y = Math.round(this.char.y * 10)/10;
 
         this.wallStop();
+        this.checkIsAlive();
     }
 
     wallStop() {
@@ -75,6 +76,11 @@ export class Character {
         return this.char.y;
     }
 
+    checkIsAlive() {
+        if (store.char.isAlive === false) {
+            this.removeCharacter();
+        }
+    }
     removeCharacter() {
         this.app.stage.removeChild(this.char);
         this.app.ticker.remove(this.tickerFn);

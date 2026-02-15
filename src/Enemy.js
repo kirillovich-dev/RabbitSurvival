@@ -27,13 +27,15 @@ export class Enemy {
     if (!this.enemy) return
     this.findVector();
     this.onMoveObject(dt);
+    this.checkCharacterKilled();
+    this.checkEnemyKilled();
   }
 
   onMoveObject(delta) {
       this.enemy.x += this.dirX * this.enemySpeed * delta;
       this.enemy.y += this.dirY * this.enemySpeed * delta;
-      store.enemy.x = Math.round(this.enemy.x * 10)/10;
-      store.enemy.y = Math.round(this.enemy.y * 10)/10;
+      this.enemy.x = Math.round(this.enemy.x * 10)/10;
+      this.enemy.y = Math.round(this.enemy.y * 10)/10;
   }
 
   findVector() {
@@ -56,5 +58,31 @@ export class Enemy {
         this.enemy = null;
     }
 
+    checkCharacterKilled() {
+        if (this.char && this.enemy) {
+            if (store.char.x && this.enemy.x && this.enemy.x === store.char.x && this.enemy.y  === store.char.y) {
+                store.char.isAlive = false;
+            }
+        } 
+    }
 
+    checkEnemyKilled() {
+      for (let i = 0; i < store.bullets.length; i++){
+        const bullet = store.bullets[i];
+        if (bullet?.x && this.enemy) {
+            const xCollision = (bullet.x >= this.enemy.x-this.enemy.width/2 && bullet.x <= this.enemy.x+this.enemy.width/2);
+            const yCollision = (bullet.y >= this.enemy.y-this.enemy.height/2 && bullet.y <= this.enemy.y+this.enemy.height/2);
+            if (xCollision && yCollision) {
+                bullet.x = undefined;
+                bullet.y = undefined;
+                this.enemy.x = undefined;
+                this.enemy.y = undefined;
+                
+                bullet.isAlive = false;
+                this.enemy.removeEnemy();
+                // this.createEnemy();
+            }
+        }
+      }
+    }
 }
