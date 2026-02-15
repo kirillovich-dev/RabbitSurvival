@@ -4,11 +4,7 @@ export const store = {
         y: window.innerHeight / 2,
         isAlive: true
     },
-    // enemy: {
-    //     x: 0,
-    //     y: 0,
-    //     width: 30,
-    //     height: 30
-    // },
-    bullets: []
+
+    bullets: [],
+    enemyCount: 0
 }

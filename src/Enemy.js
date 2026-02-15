@@ -34,8 +34,9 @@ export class Enemy {
   onMoveObject(delta) {
       this.enemy.x += this.dirX * this.enemySpeed * delta;
       this.enemy.y += this.dirY * this.enemySpeed * delta;
-      this.enemy.x = Math.round(this.enemy.x * 10)/10;
-      this.enemy.y = Math.round(this.enemy.y * 10)/10;
+
+      this.enemy.x = Math.round(this.enemy.x);
+      this.enemy.y = Math.round(this.enemy.y);
   }
 
   findVector() {
@@ -49,9 +50,9 @@ export class Enemy {
     }
 
   removeEnemy() {
-    if (!this.enemy){
-      return
-    }
+    if (!this.enemy) {
+        return;
+      }
         this.app.stage.removeChild(this.enemy);
         this.app.ticker.remove(this.tickerFn);
         this.enemy.destroy();
@@ -69,18 +70,21 @@ export class Enemy {
     checkEnemyKilled() {
       for (let i = 0; i < store.bullets.length; i++){
         const bullet = store.bullets[i];
+
         if (bullet?.x && this.enemy) {
-            const xCollision = (bullet.x >= this.enemy.x-this.enemy.width/2 && bullet.x <= this.enemy.x+this.enemy.width/2);
-            const yCollision = (bullet.y >= this.enemy.y-this.enemy.height/2 && bullet.y <= this.enemy.y+this.enemy.height/2);
+            const xCollision = (bullet.x >= this.enemy.x - this.enemy.width/2 && bullet.x <= this.enemy.x + this.enemy.width/2);
+
+            const yCollision = (bullet.y >= this.enemy.y - this.enemy.height/2 && bullet.y <= this.enemy.y + this.enemy.height/2);
             if (xCollision && yCollision) {
+
                 bullet.x = undefined;
                 bullet.y = undefined;
                 this.enemy.x = undefined;
                 this.enemy.y = undefined;
                 
                 bullet.isAlive = false;
-                this.enemy.removeEnemy();
-                // this.createEnemy();
+                this.removeEnemy();
+                //decrease enemyCount here
             }
         }
       }
