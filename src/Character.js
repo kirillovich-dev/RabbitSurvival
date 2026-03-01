@@ -8,7 +8,7 @@ export class Character {
         this.tickerFn = (delta) => this.update(delta.deltaMS / 60);
         this.app.ticker.add(this.tickerFn);
     }
-    
+
     async initCharacter() {
         const texture = await PIXI.Assets.load('assets/char.png');
         this.char = PIXI.Sprite.from(texture);
@@ -67,7 +67,7 @@ export class Character {
             this.char.x = 0;
         }
     }
-    
+
     getCharX() {
         return this.char.x;
     }

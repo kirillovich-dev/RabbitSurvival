@@ -2,38 +2,40 @@ import {Enemy} from "./Enemy.js";
 import {Character} from "./Character.js";
 import {Bullet} from "./Bullet.js";
 import {store} from "./gameStore.js";
+import {PowerUp} from "./PowerUp.js"
 
-//TODO: rename class
-export class CollisionSystem {
+export class InitSystem {
     constructor (app) {
         this.app = app;
         this.listeners();
         this.createCharacter();
         this.enemySpawn();
+        this.createPowerup();
         this.tickerFn = (delta) => this.update(delta.deltaMS / 60);
         this.app.ticker.add(this.tickerFn);
         this.bulletId = 1;
     }
-    wave = 1
+    wave = 1;
+
     createCharacter() {
         this.char = new Character(this.app);
     }
     createEnemy() {
-        //count here in store
-        this.enemy = new Enemy(this.app, 'assets/enemy.png');
+        new Enemy(this.app, 'assets/enemy.png');
+        store.enemyCount += 1;
     }
     createBullet() {
         const bullet = new Bullet(this.app, this.char.getCharX(), this.char.getCharY(), this.mouseX, this.mouseY, this.bulletId++);
         store.bullets.push(bullet);
     }
-
-    //TODO: make waves
     enemySpawn() {
-        for (let i = 0; i<this.wave * 1; i++) {
+        for (let i = 0; i<this.wave * 5; i++) {
             this.createEnemy();
         }
     }
-
+    createPowerup() {
+        new PowerUp(this.app);
+    }
     listeners() {
         document.addEventListener('keyup', (e) => {
             this.shoot(e);
@@ -49,7 +51,9 @@ export class CollisionSystem {
         }
     }
     update(dt) {
-        //check here if enemy 0 and create new wave
+        if (store.enemyCount === 0) {
+            this.wave += 1;
+            this.enemySpawn();
+        }
     }
-
 }

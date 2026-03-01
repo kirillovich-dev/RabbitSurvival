@@ -8,11 +8,12 @@ export class Enemy {
     this.app.ticker.add(this.tickerFn);
   }
 
-  enemySpeed = 10;
-  
+  enemySpeed = 4;
+
   async initEnemy() {
     const texture = await PIXI.Assets.load(this.spriteAddress);
     this.enemy = PIXI.Sprite.from(texture);
+    this.app.stage.addChild(this.enemy);
     this.startPosition();
   }
 
@@ -20,11 +21,10 @@ export class Enemy {
     this.enemy.anchor.set(0.5);
     this.enemy.x = Math.random() * window.innerWidth;
     this.enemy.y = Math.random() * window.innerHeight;
-    this.app.stage.addChild(this.enemy);
   }
 
   update(dt) {
-    if (!this.enemy) return
+    if (!this.enemy) return;
     this.findVector();
     this.onMoveObject(dt);
     this.checkCharacterKilled();
@@ -60,11 +60,13 @@ export class Enemy {
     }
 
     checkCharacterKilled() {
-        if (this.char && this.enemy) {
-            if (store.char.x && this.enemy.x && this.enemy.x === store.char.x && this.enemy.y  === store.char.y) {
-                store.char.isAlive = false;
-            }
-        } 
+        if (store.char?.x && this.enemy) {
+          const xCollision = (store.char.x >= this.enemy.x - this.enemy.width/2 && store.char.x <= this.enemy.x + this.enemy.width/2);
+          const yCollision = (store.char.y >= this.enemy.y - this.enemy.height/2 && store.char.y <= this.enemy.y + this.enemy.height/2);
+          if (xCollision && yCollision) {
+            store.char.isAlive = false;
+          }
+        }
     }
 
     checkEnemyKilled() {
@@ -81,10 +83,10 @@ export class Enemy {
                 bullet.y = undefined;
                 this.enemy.x = undefined;
                 this.enemy.y = undefined;
-                
+
                 bullet.isAlive = false;
                 this.removeEnemy();
-                //decrease enemyCount here
+                store.enemyCount -= 1;
             }
         }
       }

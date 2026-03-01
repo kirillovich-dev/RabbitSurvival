@@ -24,7 +24,7 @@ export class Bullet {
         this.app.stage.addChild(graphics);
         this.bullet = graphics;
     }
-    
+
     findVector() {
         const dx = this.mouseX - this.initialX;
         const dy = this.mouseY - this.initialY;
