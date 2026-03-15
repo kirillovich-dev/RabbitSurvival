@@ -25,7 +25,7 @@ export class InitSystem {
         store.enemyCount += 1;
     }
     createBullet() {
-        const bullet = new Bullet(this.app, this.char.getCharX(), this.char.getCharY(), this.mouseX, this.mouseY, this.bulletId++);
+        const bullet = new Bullet(this.app, store.char.x, store.char.y, this.mouseX, this.mouseY, this.bulletId++);
         store.bullets.push(bullet);
     }
     enemySpawn() {
@@ -37,18 +37,16 @@ export class InitSystem {
         new PowerUp(this.app);
     }
     listeners() {
-        document.addEventListener('keyup', (e) => {
-            this.shoot(e);
+
+        document.addEventListener("mousedown", (e) => {
+            if (e.button === 0) {
+                this.createBullet();
+            }
         });
         document.addEventListener("mousemove", (e) => {
             this.mouseX = e.x;
             this.mouseY = e.y;
         })
-    }
-    shoot(e) {
-        if (e.key === " ") {
-            this.createBullet();
-        }
     }
     update(dt) {
         if (store.enemyCount === 0) {

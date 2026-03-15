@@ -10,13 +10,32 @@ export class PowerUp {
     }
 
     initPowerup() {
-        const graphics = new PIXI.Graphics().circle(this.initialX,this.initialY, 10).fill(0xff0000);
+        const graphics = new PIXI.Graphics().circle(this.initialX,this.initialY, 10);
         this.app.stage.addChild(graphics);
         this.powerup = graphics;
+
+        const chance = Math.round(Math.random()*10);
+        switch (chance) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                this.fastWalkBonus();
+                break;
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            default:
+                this.fastShootBonus();
+                break;
+        }
     }
     startPosition() {
-        this.powerup.x = Math.random() * (window.innerWidth - 50) + 50;
-        this.powerup.y = Math.random() * (window.innerHeight - 50) + 50;
+        this.powerup.x = Math.random() * (window.innerWidth - 100) + 100;
+        this.powerup.y = Math.random() * (window.innerHeight - 100) + 100;
     }
 
     update (dt) {
@@ -29,9 +48,19 @@ export class PowerUp {
         }
 
         this.app.stage.removeChild(this.powerup);
-        this.app.ticker.remove(this.tickerFn);
         this.powerup.destroy();
         this.powerup = null;
+    }
+
+    fastWalkBonus() {
+        const multiplierStep = 0.3;
+        store.char.fastWalkMultiplier = store.char.fastWalkMultiplier + multiplierStep;
+        this.powerup.fill(0xffff00);
+    }
+    fastShootBonus() {
+        const multiplierStep = 0.5;
+        store.char.fastShootMultiplier = store.char.fastShootMultiplier + multiplierStep;
+        this.powerup.fill(0xff0000);
     }
 
     hitboxChecker() {
@@ -41,10 +70,11 @@ export class PowerUp {
 
             const yCollision = (char.y >= this.powerup.y - this.powerup.height && char.y <= this.powerup.y + this.powerup.height);
             if (xCollision && yCollision) {
-
                 this.powerup.x = undefined;
                 this.powerup.y = undefined;
                 this.removePowerup();
+                this.initPowerup();
+                this.startPosition();
 
             }
         }

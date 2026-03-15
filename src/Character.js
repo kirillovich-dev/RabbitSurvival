@@ -3,7 +3,6 @@ export class Character {
     constructor(app) {
         this.app = app;
         this.keys = {};
-        this.speed = 20;
         this.initCharacter();
         this.tickerFn = (delta) => this.update(delta.deltaMS / 60);
         this.app.ticker.add(this.tickerFn);
@@ -39,12 +38,12 @@ export class Character {
 
         const len = Math.hypot(dx, dy);
         if (len) {
-        dx /= len;
-        dy /= len;
+            dx /= len;
+            dy /= len;
         }
 
-        this.char.x += dx * this.speed * dt;
-        this.char.y += dy * this.speed * dt;
+        this.char.x += dx * dt * store.char.fastWalkMultiplier;
+        this.char.y += dy * dt * store.char.fastWalkMultiplier;
 
         store.char.x = Math.round(this.char.x * 10)/10;
         store.char.y = Math.round(this.char.y * 10)/10;
@@ -68,14 +67,6 @@ export class Character {
         }
     }
 
-    getCharX() {
-        return this.char.x;
-    }
-
-    getCharY() {
-        return this.char.y;
-    }
-
     checkIsAlive() {
         if (store.char.isAlive === false) {
             this.removeCharacter();
@@ -86,7 +77,7 @@ export class Character {
         this.app.ticker.remove(this.tickerFn);
         this.char.destroy();
         this.char = null;
-        store.char.x = null;
-        store.char.y = null;
+        store.char.x = undefined;
+        store.char.y = undefined;
     }
 }

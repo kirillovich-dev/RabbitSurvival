@@ -17,8 +17,6 @@ export class Bullet {
         this.isAlive = true;
     }
 
-    bulletSpeed = 15;
-
     createBullet() {
         const graphics = new PIXI.Graphics().circle(this.initialX,this.initialY, 10).fill(0xffffff);
         this.app.stage.addChild(graphics);
@@ -36,8 +34,8 @@ export class Bullet {
     }
 
     onMoveObject(delta) {
-        this.bullet.x += this.dirX * this.bulletSpeed * delta;
-        this.bullet.y += this.dirY * this.bulletSpeed * delta;
+        this.bullet.x += this.dirX * delta * store.char.fastShootMultiplier;
+        this.bullet.y += this.dirY * delta * store.char.fastShootMultiplier;
         this.x = Math.round(this.bullet.x + this.initialX);
         this.y = Math.round(this.bullet.y + this.initialY);
     }
